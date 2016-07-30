@@ -1,0 +1,41 @@
+{
+  "name": "listenable-browser",
+  "productName": "Listenable Browser",
+  "version": "1.0.0",
+  "description": "screen readers suck",
+  "config": {
+    "focus_shortcut": "CommandOrControl+B"
+  },
+  "main": "how_to/RUNME.js",
+  "scripts": {
+    "start": "electron .",
+    "test": "jest --coverage",
+    "prebuild": "npm run test",
+    "build": "npm run build:macos && npm run build:linux",
+    "build:macos": "electron-packager . --overwrite --asar --out=executables --ignore='^media$' --prune --platform=darwin --arch=x64 --app-bundle-id=io.github.hermanya --app-version=$npm_package_version && cd \"executables/${npm_package_productName}-darwin-x64\" && zip -ryXq9 ../${npm_package_name}-osx-${npm_package_version}.zip \"${npm_package_productName}.app\"",
+    "build:linux": "electron-packager . --overwrite --out=executables --ignore='^media$' --prune --platform=linux --arch=x64 --app-bundle-id=io.github.hermanya --app-version=$npm_package_version && cd \"executables/${npm_package_productName}-linux-x64\" && zip -ryq9 ../${npm_package_name}-linux-${npm_package_version}.zip *",
+    "build:windows": "electron-packager . --overwrite --asar --out=executables --ignore='^media$' --prune --platform=win32 --arch=ia32 --version-string.ProductName=$npm_package_productName --app-version=$npm_package_version && cd executables/${npm_package_name}-win32-ia32 && zip -ryq9 ../${npm_package_name}-windows-${npm_package_version}.zip *"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hermanya/listenable-browser.git"
+  },
+  "author": "Herman Starikov",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/hermanya/listenable-browser/issues"
+  },
+  "homepage": "https://github.com/hermanya/listenable-browser#readme",
+  "devDependencies": {
+    "electron": "^1.3.1",
+    "electron-packager": "^7.3.0",
+    "electron-prebuilt": "^1.2.0",
+    "jest-cli": "^14.0.0"
+  },
+  "dependencies": {
+    "say": "^0.9.0"
+  },
+  "jest": {
+    "testRegex": "./how_to/test/.*.js"
+  }
+}
