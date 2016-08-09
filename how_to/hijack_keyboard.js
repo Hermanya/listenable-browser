@@ -13,7 +13,9 @@ const keys = [
     'Escape'
 ]
 
+const open_window = require('./open_window.js')
+
 module.exports = function hijack_keyboard () {
-    say('you are in')
+    say(`you are on ${open_window.title() || 'the browser'}`)
     keys.map(key => globalShortcut.register(key, () => handle_keystroke(key)))
 }

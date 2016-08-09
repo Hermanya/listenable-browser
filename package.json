@@ -10,7 +10,6 @@
   "scripts": {
     "start": "electron .",
     "test": "jest --coverage",
-    "prebuild": "npm run test",
     "build": "npm run build:macos && npm run build:linux",
     "build:macos": "electron-packager . --overwrite --asar --out=executables --ignore='^media$' --prune --platform=darwin --arch=x64 --app-bundle-id=io.github.hermanya --app-version=$npm_package_version && cd \"executables/${npm_package_productName}-darwin-x64\" && zip -ryXq9 ../${npm_package_name}-osx-${npm_package_version}.zip \"${npm_package_productName}.app\"",
     "build:linux": "electron-packager . --overwrite --out=executables --ignore='^media$' --prune --platform=linux --arch=x64 --app-bundle-id=io.github.hermanya --app-version=$npm_package_version && cd \"executables/${npm_package_productName}-linux-x64\" && zip -ryq9 ../${npm_package_name}-linux-${npm_package_version}.zip *",
@@ -27,16 +26,21 @@
   },
   "homepage": "https://github.com/hermanya/listenable-browser#readme",
   "devDependencies": {
+    "babel-eslint": "^6.1.2",
     "coveralls": "^2.11.12",
-    "electron": "^1.3.1",
-    "electron-packager": "^7.3.0",
+    "electron": "^1.3.2",
+    "electron-packager": "^7.5.1",
     "electron-prebuilt": "^1.2.0",
+    "eslint": "3.1.1",
+    "eslint-loader": "1.4.1",
     "jest-cli": "^14.0.0"
   },
   "dependencies": {
+    "babel-eslint": "^6.1.2",
     "say": "^0.9.0"
   },
   "jest": {
-    "testRegex": "./how_to/test/.*.js"
+    "testRegex": "./how_to/test/.*.js",
+    "testPathIgnorePatterns": ["/node_modules/", "/executables/"]
   }
 }

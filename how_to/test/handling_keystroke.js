@@ -3,7 +3,6 @@ jest.setMock('electron', {globalShortcut})
 jest.unmock('../handle_keystroke.js')
 const handle_keystroke = require('../handle_keystroke.js')
 const handle_user_input = require('../handle_user_input.js')
-const listen_for_user_to_focus = require('../listen_for_user_to_focus.js')
 
 describe('handling keystroke', () => {
   beforeEach(() => handle_user_input.mockClear())
