@@ -7,7 +7,7 @@
 
     function obey () {
         listen_for_user_input({
-            'tweet (something)': compose
+            'tweet -something': compose
         })
     }
 

@@ -8,11 +8,11 @@ module.exports = (input, {commands, try_again, after_help, if_not_recognized}, .
     function match (input, commands) {
         let commandNames = Object.keys(commands).sort((one, another) => one.length < another.length ? 1 : -1)
         let found = commandNames.find(name => {
-            let word = name.split('(')[0]
+            let word = name.split('-')[0]
             return input.match(new RegExp(`^${word}`, 'i'));
         })
         if (found) {
-            let param = input.slice(found.split('(')[0].length)
+            let param = input.slice(found.split('-')[0].length)
             return () => commands[found](param)
         } else {
             return () => unrecognized(input)

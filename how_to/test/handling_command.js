@@ -1,6 +1,6 @@
 let options = {
     commands: {
-        'do (something)': jest.fn(),
+        'do -something': jest.fn(),
         'do': jest.fn()
     },
     if_not_recognized: jest.fn(() => Promise.resolve()),

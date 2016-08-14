@@ -1,4 +1,6 @@
-window.onload = function() {
+window.addEventListener('load', () => {
+    let {say, listenForUserInput: listen_for_user_input} = window.listenableBrowser
+
     let results = Array.from(document.querySelectorAll('.srg .g')).map(element => {
         return {
             link: element.querySelector('h3 a').href,
@@ -14,12 +16,16 @@ window.onload = function() {
         }
         say(results[index].title).then(obey)
         function obey () {
-            listenForUserInput({
+            listen_for_user_input({
                 '': () => doItem(index + 1),
                 'proceed': () => doItem(index + 1),
-                'elaborate': () => say(results[index].description).then(obey)
-                'open': () => location.href = results[index].link
+                'elaborate': () => say(results[index].description).then(obey),
+                'open': () => {location.href = results[index].link}
             })
         }
     }
-};
+
+    function search (query) {
+        location.href = `/search?q=${query}`
+    }
+})

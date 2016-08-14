@@ -1,4 +1,3 @@
-
 window.addEventListener('load', () => {
     let {say, listenForUserInput: listen_for_user_input} = window.listenableBrowser
     let current_title;
@@ -17,7 +16,7 @@ window.addEventListener('load', () => {
                 }
 
                 let obey = () => listen_for_user_input({
-                    'play (something else)': that_something => search(that_something),
+                    'play -something else': that_something => search(that_something),
                     'play':  () => { document.querySelector('[aria-label="Play"]').click(); obey() },
                     'pause': () => { document.querySelector('[aria-label="Pause"]').click(); obey() },
                     'next':  () => { document.querySelector('.autoplay-bar').querySelector('a[href^="/watch"]:not([aria-hidden])').click(); wait_for_title_to_change().then(route) }

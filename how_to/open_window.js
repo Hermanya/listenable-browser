@@ -1,20 +1,20 @@
 const {BrowserWindow} = require('electron')
-let history = []
+let open_websites = {}
 var current_window
 
 module.exports = function open_window (url) {
-    if (current_window) {
-        current_window.destroy()
+    if (open_websites[url]) {
+        current_window = open_websites[url]
+    } else {
+        current_window = new BrowserWindow({
+            show: false,
+            webPreferences: {
+                nodeIntegration: false,
+                preload: `${__dirname}/../support_for_this_browser.js`
+            }
+        })
+        current_window.loadURL(url)
     }
-    current_window = new BrowserWindow({
-        show: false,
-        webPreferences: {
-            nodeIntegration: false,
-            preload: `${__dirname}/../support_for_this_browser.js`
-        }
-    })
-    current_window.loadURL(url)
-    history.push(url)
 }
 
 module.exports.send = function send_to_open_window (...things) {

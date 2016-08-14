@@ -6,8 +6,9 @@ const handle_command = require('./handle_command.js')
 module.exports = function handle_user_input (input) {
     return handle_command(input, {
         commands: {
-            'open (a website)': url => {
-                url = require('../bookmarks.json')[url] || url.split(' ').join('')
+            'open -a website': url => {
+                url = url.split(' ').join('')
+                url = require('../bookmarks.json')[url] || url
                 if (url.indexOf('http://') !== '0') {
                     url = `http://${url}`
                 }
@@ -19,9 +20,6 @@ module.exports = function handle_user_input (input) {
             'copy link': () => {
                 clipboard.writeText(open_window.url())
                 return say('link copied')
-            },
-            'search for (something)': query => {
-                open_window(`https://www.google.ca/search?q=${query}`)
             }
         },
         if_not_recognized: () => {open_window.send('user-input', input)},

@@ -8,7 +8,7 @@ window.onload = function() {
             name: element.querySelector('._1ht6').textContent
         }
     })
-    let active_chat = chats[0]
+    let active_chat
 
     let switch_profile_screen = document.querySelector('._5hy9')
     if (switch_profile_screen) {
@@ -17,20 +17,38 @@ window.onload = function() {
     if (document.querySelector('#login_form')) {
         login()
     } else {
-        obey()
+        say('who do you wanna chat with?').then(listen_for_user_input).then(select_chat).then(obey)
         setInterval(check_for_new_messages, 4096)
     }
 
     function obey () {
         listen_for_user_input({
-            'chat with (someone)': (someone) => select_chat(someone).then(obey),
-            'chat': () => say('with who?').then(listen_for_user_input).then(select_chat).then(obey),
+            'who -am i chatting with': () => say(active_chat ? active_chat.name : 'no one').then(obey),
+            'chat with -someone': (someone) => select_chat(someone).then(obey),
             'logout': () => {
                 document.querySelector('[aria-label="Settings, privacy policy, help and more"]').click()
                 Array.from(document.querySelectorAll('._54nc')).pop().click()
             }
         }, {
-            if_not_recognized: (message) => send(message).then(() => say('sent')).then(obey)
+            if_not_recognized: (message) => {
+                if (active_chat) {
+                    send(message).then(() => say('sent')).then(obey)
+                } else {
+                    say('who you wanna send this to?')
+                        .then(listen_for_user_input)
+                        .then((sendee) => {
+                            if (sendee === 'nobody') {
+                                say('ok, not sending it').then(obey)
+                                return Promise.reject()
+                            } else {
+                                return select_chat(sendee)
+                            }
+                        })
+                        .then(() => send(message))
+                        .then(() => say('sent'))
+                        .then(obey)
+                }
+            }
         })
     }
 
@@ -77,7 +95,7 @@ window.onload = function() {
         let chat = chats.find(chat => chat.name.match(new RegExp(name, 'i')))
         if (chat) {
             active_chat = chat
-            return say('selected')
+            return say(`selected ${chat.name}`)
         } else {
             return say(`no chat called ${name}`)
         }
@@ -86,10 +104,10 @@ window.onload = function() {
     function check_for_new_messages () {
         chats.forEach(chat => {
             let has_new_message = chat.element.parentElement.classList.contains('_1ht3')
-            let message = chat.element.querySelector('._1htf').textContent
+            let message = chat.element.querySelector('._1htf').textContent || chat.element.querySelector('._1htf img').alt
             if (has_new_message && message !== chat.last_message) {
                 chat.last_message = message
-                let has_sender = message !== chat.element.querySelector('._1htf span').textContent
+                let has_sender = message !== (chat.element.querySelector('._1htf span').textContent || chat.element.querySelector('._1htf img').alt)
                 if (has_sender) {
                     let sender = message.split(':')[0]
                     say(`${sender} says: ${message.split(':').slice(1).join(':')}`)
