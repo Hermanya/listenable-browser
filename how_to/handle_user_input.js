@@ -9,7 +9,7 @@ module.exports = function handle_user_input (input) {
             'open -a website': url => {
                 url = url.split(' ').join('')
                 url = require('../bookmarks.json')[url] || url
-                if (url.indexOf('http://') !== '0') {
+                if (url.indexOf('http://') !== 0) {
                     url = `http://${url}`
                 }
                 open_window(url)

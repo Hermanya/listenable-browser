@@ -1,10 +1,11 @@
 const current_window = {
     loadURL: jest.fn(),
-    destroy: jest.fn(),
+    close: jest.fn(),
     webContents: {
+        on: jest.fn(),
         send: jest.fn(),
         getTitle: jest.fn(),
-        getUrl: jest.fn()
+        getURL: jest.fn()
     }
 }
 const BrowserWindow = jest.fn(() => {
@@ -19,14 +20,39 @@ describe('opening window', () => {
     it('opens windows', () => {
         open_window('example.com')
         expect(current_window.loadURL).toBeCalledWith('example.com')
-        open_window('example.org')
-        expect(current_window.destroy).toBeCalled()
+        expect(current_window.webContents.on).toBeCalled() // with 'did-fail-load' and some callback
+        current_window.loadURL.mockClear()
+        open_window('example.com')
+        expect(current_window.loadURL).not.toBeCalled()
     })
     it('has title', () => {
         expect(() => open_window.title()).not.toThrow()
     })
+    it('has url', () => {
+        expect(() => open_window.url()).not.toThrow()
+    })
+    it('fails to load gracefully', () => {
+        current_window.webContents.on = (event_name, callback) => callback()
+        open_window('some_nonexisting_website.com')
+        expect(open_window.url()).not.toBe('some_nonexisting_website.com')
+        expect(open_window.title()).toBe(undefined)
+        open_window.send('stuff')
+        expect(current_window.webContents.send).not.toBeCalled()
+        current_window.webContents.on = jest.fn()
+    })
+    it('fails to load gracefully even if it is no longer current window', () => {
+        let resolve, promise = new Promise(_ => {resolve = _})
+        current_window.webContents.on = (event_name, callback) => promise.then(callback)
+        open_window('some_nonexisting_website.com')
+        current_window.webContents.on = (event_name, callback) => callback()
+        open_window('another_example.com')
+        current_window.webContents.on = jest.fn()
+        resolve()
+        return promise;
+    })
     it('can send', () => {
-        open_window.send('event-name', 'data')
-        expect(current_window.webContents.send).toBeCalledWith('event-name', 'data')
+        open_window('example.com')
+        open_window.send('event_name', 'data')
+        expect(current_window.webContents.send).toBeCalledWith('event_name', 'data')
     })
 })

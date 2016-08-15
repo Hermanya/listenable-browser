@@ -48,9 +48,9 @@ module.exports = function handle_keystroke (key) {
             current_input = words.slice(0, -1).join(' ') + ' '
             let last_word = words.pop()
             if (last_word) {
-                say(`scratched ${last_word}`)
+                say(`Scratched ${last_word}`)
             } else {
-                say(`nothing to scratch`)
+                say(`Nothing to scratch.`)
             }
         },
         Enter: () => {

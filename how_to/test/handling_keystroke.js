@@ -1,8 +1,13 @@
 const globalShortcut = {unregisterAll: jest.fn()}
 jest.setMock('electron', {globalShortcut})
+
+const player = {play: jest.fn((_, callback) => callback && callback())}
+jest.setMock('play-sound', () => player)
+
 jest.unmock('../handle_keystroke.js')
 const handle_keystroke = require('../handle_keystroke.js')
 const handle_user_input = require('../handle_user_input.js')
+const say = require('../say_something.js')
 
 describe('handling keystroke', () => {
   beforeEach(() => handle_user_input.mockClear())
@@ -16,6 +21,7 @@ describe('handling keystroke', () => {
       expect(handle_user_input).toBeCalledWith('+')
   })
   it('handles backspace', () => {
+      handle_keystroke('Space')
       handle_keystroke('Shift+i')
       handle_keystroke('Space')
       handle_keystroke('h')
@@ -25,10 +31,17 @@ describe('handling keystroke', () => {
       handle_keystroke('m')
       handle_keystroke('Enter')
       expect(handle_user_input).toBeCalledWith('I am')
+      say.mockClear()
+      handle_keystroke('Backspace')
+      expect(say).toBeCalledWith('Nothing to scratch.')
   })
   it('handles blur', () => {
       handle_keystroke('Escape')
-    //   expect(listen_for_user_to_focus).toBeCalled()
+      expect(player.play).toBeCalled()
       expect(globalShortcut.unregisterAll).toBeCalled()
+  })
+  it('handles media keys', () => {
+      handle_keystroke('MediaNextTrack')
+      expect(handle_user_input).toBeCalledWith('MediaNextTrack')
   })
 })
