@@ -3,3 +3,5 @@ node_js:
   - "node"
 after_script:
   - cat ./coverage/lcov.info | ./node_modules/.bin/coveralls
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
