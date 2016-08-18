@@ -4,7 +4,7 @@ const app = {
 const clipboard = {
     writeText: jest.fn()
 }
-jest.setMock('electron', {app, clipboard})
+jest.setMock('electron', {app, clipboard, ipcMain: {on: jest.fn()}})
 jest.setMock('../say_something.js', jest.fn(() => Promise.resolve()))
 jest.unmock('../handle_command.js')
 jest.unmock('../handle_user_input.js')

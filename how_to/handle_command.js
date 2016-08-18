@@ -24,7 +24,7 @@ module.exports = (input, {commands, try_again, after_help, if_not_recognized}, .
     }
 
     function with_help (commands) {
-        let commandNames = Object.keys(commands)
+        let commandNames = Object.keys(commands).filter(name => name.indexOf('Media') === -1)
         let message
         if (commandNames.length === 0) {
             message = 'There are no commands.'

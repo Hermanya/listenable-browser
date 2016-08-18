@@ -11,18 +11,18 @@ const current_window = {
 const BrowserWindow = jest.fn(() => {
     return current_window
 })
-jest.setMock('electron', {BrowserWindow})
+jest.setMock('electron', {BrowserWindow, ipcMain: {on: jest.fn()}})
 jest.setMock('../say_something.js', jest.fn(() => Promise.resolve()))
 jest.unmock('../open_window.js')
 const open_window = require('../open_window.js')
 
 describe('opening window', () => {
     it('opens windows', () => {
-        open_window('example.com')
-        expect(current_window.loadURL).toBeCalledWith('example.com')
+        open_window('opening_window.com')
+        expect(current_window.loadURL).toBeCalledWith('opening_window.com')
         expect(current_window.webContents.on).toBeCalled() // with 'did-fail-load' and some callback
         current_window.loadURL.mockClear()
-        open_window('example.com')
+        open_window('opening_window.com')
         expect(current_window.loadURL).not.toBeCalled()
     })
     it('has title', () => {
@@ -44,11 +44,11 @@ describe('opening window', () => {
         let resolve, promise = new Promise(_ => {resolve = _})
         current_window.webContents.on = (event_name, callback) => promise.then(callback)
         open_window('some_nonexisting_website.com')
-        current_window.webContents.on = (event_name, callback) => callback()
-        open_window('another_example.com')
+        current_window.webContents.on = () => {}
+        open_window('some_existing_website.com')
         current_window.webContents.on = jest.fn()
         resolve()
-        return promise;
+        return promise.then(() => expect(open_window.url()).toBe('some_existing_website.com'));
     })
     it('can send', () => {
         open_window('example.com')

@@ -1,7 +1,7 @@
 (function () {
     let handle_command = require('./how_to/handle_command.js')
     let listeners = []
-    let {say} = window.listenableBrowser = {
+    window.listenableBrowser = {
         listenForUserInput: (commands, options, ...rest) => {
             if (commands) {
                 options = options || {}
@@ -18,8 +18,12 @@
                 return new Promise(resolve => listeners.push(resolve))
             }
         },
-        say: require('./how_to/say_something.js'),
-        openWindow: require('./how_to/open_window.js')
+        say: require('./how_to/say_something.js')
+    }
+
+    window.open = (url) => {
+        // require('electron').ipcRenderer.send('open-window', url)
+        location.href = url
     }
 
     require('electron').ipcRenderer.on('user-input', (event, input) => {
@@ -31,6 +35,6 @@
     try {
         require(`./what_would_client_be_like_for/${location.hostname}.js`)
     } catch (e) {
-        // say(`this website is not supported`) // TODO: make this work with bookmarks
+        // hope website supports listenableBrowser
     }
 })()

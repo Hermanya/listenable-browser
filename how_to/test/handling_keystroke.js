@@ -1,5 +1,5 @@
 const globalShortcut = {unregisterAll: jest.fn()}
-jest.setMock('electron', {globalShortcut})
+jest.setMock('electron', {globalShortcut, ipcMain: {on: jest.fn()}})
 
 const player = {play: jest.fn((_, callback) => callback && callback())}
 jest.setMock('play-sound', () => player)

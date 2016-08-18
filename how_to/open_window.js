@@ -1,27 +1,42 @@
-const {BrowserWindow} = require('electron')
+const {BrowserWindow, ipcMain} = require('electron')
 const say = require('./say_something.js')
 let open_websites = {}
 var current_window
 
-module.exports = function open_window (url) {
-    if (open_websites[url]) {
-        current_window = open_websites[url]
+ipcMain.on('open-window', open_window)
+
+module.exports = open_window
+function open_window (maybe_event, url) {
+    if (!url) {
+        url = maybe_event
+    }
+    let host = (url.match('//([^/]+)/') || [url, url])[1]
+    if (open_websites[host]) {
+        current_window = open_websites[host]
     } else {
-        current_window = open_websites[url] = new BrowserWindow({
+        current_window = open_websites[host] = new BrowserWindow({
             show: false,
             webPreferences: {
                 nodeIntegration: false,
                 preload: `${__dirname}/../support_for_this_browser.js`
             }
         })
+        current_window.url = url
         current_window.loadURL(url)
-        current_window.webContents.on('did-fail-load', () => {
-            say('Website failed to load.')
-            open_websites[url].close()
-            if (current_window === open_websites[url]) {
-                current_window = undefined
+        current_window.webContents.on('did-fail-load', (event, error_code) => {
+            let redirect = -3
+            let something_triggered_by_loggin_out_out_of_sound_cloud = 0
+            if (error_code !== redirect && error_code !== something_triggered_by_loggin_out_out_of_sound_cloud) {
+                if (open_websites[host]) {
+                    console.log(`closing ${host} because of ${error_code}`);
+                //  open_websites[host].close() // TODO: figure out why it crashes the app:
+                    if (current_window === open_websites[host]) {
+                        current_window = undefined
+                    }
+                    open_websites[host] = undefined
+                    console.log(open_websites)
+                }
             }
-            open_websites[url] = undefined
         })
     }
 }
@@ -40,6 +55,6 @@ module.exports.title = function open_window_title () {
 
 module.exports.url = function open_window_url () {
     if (current_window) {
-        return current_window.webContents.getURL()
+        return current_window.url
     }
 }
