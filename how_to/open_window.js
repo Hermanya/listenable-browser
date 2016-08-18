@@ -28,13 +28,11 @@ function open_window (maybe_event, url) {
             let something_triggered_by_loggin_out_out_of_sound_cloud = 0
             if (error_code !== redirect && error_code !== something_triggered_by_loggin_out_out_of_sound_cloud) {
                 if (open_websites[host]) {
-                    console.log(`closing ${host} because of ${error_code}`);
                 //  open_websites[host].close() // TODO: figure out why it crashes the app:
                     if (current_window === open_websites[host]) {
                         current_window = undefined
                     }
                     open_websites[host] = undefined
-                    console.log(open_websites)
                 }
             }
         })

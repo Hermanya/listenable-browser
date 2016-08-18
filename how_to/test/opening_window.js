@@ -9,7 +9,7 @@ const current_window = {
     }
 }
 const BrowserWindow = jest.fn(() => {
-    return current_window
+    return Object.create(current_window)
 })
 jest.setMock('electron', {BrowserWindow, ipcMain: {on: jest.fn()}})
 jest.setMock('../say_something.js', jest.fn(() => Promise.resolve()))

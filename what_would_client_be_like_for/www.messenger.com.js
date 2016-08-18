@@ -23,9 +23,9 @@ window.onload = function() {
 
     function obey () {
         listen_for_user_input({
-            'who -am i chatting with': () => say(active_chat ? active_chat.name : 'no one').then(obey),
             'chat with -someone': (someone) => select_chat(someone).then(obey),
-            'logout': () => {
+            'who -am i chatting with?': () => say(active_chat ? active_chat.name : 'no one').then(obey),
+            'log out': () => {
                 document.querySelector('[aria-label="Settings, privacy policy, help and more"]').click()
                 Array.from(document.querySelectorAll('._54nc')).pop().click()
             }
