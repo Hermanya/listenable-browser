@@ -12,9 +12,9 @@
     "test": "jest --coverage",
     "prebuild": "npm run test",
     "build": "npm run build:macos && npm run build:linux",
-    "build:macos": "electron-packager . --overwrite --asar --out=executables --ignore='^media$' --prune --platform=darwin --arch=x64 --app-bundle-id=io.github.hermanya --app-version=$npm_package_version && cd \"executables/${npm_package_productName}-darwin-x64\" && zip -ryXq9 ../${npm_package_name}-osx-${npm_package_version}.zip \"${npm_package_productName}.app\"",
+    "build:macos": "electron-packager . --overwrite --out=executables --ignore='^media$' --prune --platform=darwin --arch=x64 --app-bundle-id=io.github.hermanya --app-version=$npm_package_version && cd \"executables/${npm_package_productName}-darwin-x64\" && zip -ryXq9 ../${npm_package_name}-osx-${npm_package_version}.zip \"${npm_package_productName}.app\"",
     "build:linux": "electron-packager . --overwrite --out=executables --ignore='^media$' --prune --platform=linux --arch=x64 --app-bundle-id=io.github.hermanya --app-version=$npm_package_version && cd \"executables/${npm_package_productName}-linux-x64\" && zip -ryq9 ../${npm_package_name}-linux-${npm_package_version}.zip *",
-    "build:windows": "electron-packager . --overwrite --asar --out=executables --ignore='^media$' --prune --platform=win32 --arch=ia32 --version-string.ProductName=$npm_package_productName --app-version=$npm_package_version && cd executables/${npm_package_name}-win32-ia32 && zip -ryq9 ../${npm_package_name}-windows-${npm_package_version}.zip *"
+    "build:windows": "electron-packager . --overwrite --out=executables --ignore='^media$' --prune --platform=win32 --arch=ia32 --version-string.ProductName=$npm_package_productName --app-version=$npm_package_version && cd executables/${npm_package_name}-win32-ia32 && zip -ryq9 ../${npm_package_name}-windows-${npm_package_version}.zip *"
   },
   "repository": {
     "type": "git",
