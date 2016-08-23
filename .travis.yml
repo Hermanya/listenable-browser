@@ -1,7 +1,7 @@
 language: node_js
 node_js:
 - node
-script: npm build
+script: npm run build
 after_script:
 - cat ./coverage/lcov.info | ./node_modules/.bin/coveralls
 after_success:
