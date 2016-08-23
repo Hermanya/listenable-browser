@@ -1,7 +1,17 @@
 language: node_js
 node_js:
-  - "node"
+- node
 after_script:
-  - cat ./coverage/lcov.info | ./node_modules/.bin/coveralls
+- cat ./coverage/lcov.info | ./node_modules/.bin/coveralls
 after_success:
-  - bash <(curl -s https://codecov.io/bash)
+- bash <(curl -s https://codecov.io/bash)
+deploy:
+  provider: releases
+  api_key:
+    secure: HkNiVimanSoY5r7oaBW+kpTLfX0U2jKrPngCAsdJAmNL2lZA7Pe1xgDTtLn/Rw03w7Z1yDhTsYHXRRQoVZDbB3kE0mu+cenVRtqF6BlTXICWNhg3OUVbdfkzqBQga/VGnMeufb2ksgGK+n4XfbknbpLOGnJr+WN7H1KXe8NOB5U0BfS5vkU1tIuMI6eyE1ojUn7CKxIW1Xr98esO/wANDNaF3NW6OYSAxzKKlczAd0D28oYEL7ZhG5AE9xWTcu4GsQc680tS4yzsNKuNxzAIdwKv63EUi5vh4p2wJqAkFZf9rlzFfScCd610tjV1N+Y9HYnBQ7EuBaeMji2qEapaLCxMNtcfrXumPswHSMwiEY2yjZXxiiXRLdBxh+Z8rnctQuWwbWmydkUUgOq+NllFkJJ2No1nt5lSBaXF9CxgZtYWo8C55jwXi9k1/CAUr0Z08H2OsyoMxYUiyIYiJYHUBB+zvVJKP89yYHhsnqOwO4zSYKNNp3Ygb3jFbcFIsj0OhmoUADDn1OjnwWKTlTtB1Qz81YCHGb0qq2EkrP2gqvCbwDJ98JazxFVCpHjEgHq+arvmOBhL56T5N5EvtpD/LNXvAiFPZgmAtR3NKDRnmSHW0BY95pDw+0FY2A9LzRShApzrpitIybE5HEH8fLAKxgag8OdIUomQDsvmoxrpu5s=
+  file:
+    - "executables/listenable-browser-osx-1.1.2.zip"
+    - "executables/listenable-browser-linux-1.1.2.zip"
+  on:
+    repo: Hermanya/listenable-browser
+  skip_cleanup: true
