@@ -10,14 +10,13 @@ function deactivate_browser () {
     clearTimeout(deactivation_timeout)
     globalShortcut.unregisterAll()
     require('./listen_for_user_to_focus.js')()
-
-    player.play(__dirname + '/../what_you_hear/when_locked.mp3')
+    say('You are out.')
     current_input = ''
 }
 
 module.exports = function handle_keystroke (key) {
     clearTimeout(deactivation_timeout)
-    deactivation_timeout = setTimeout(deactivate_browser, 10000)
+    deactivation_timeout = setTimeout(deactivate_browser, 1000 * 60 * 2)
     say.no_more()
     return ({
         Escape: deactivate_browser,
@@ -50,7 +49,7 @@ module.exports = function handle_keystroke (key) {
             if (last_word) {
                 say(`Scratched ${last_word}`)
             } else {
-                say(`Nothing to scratch.`)
+                player.play(__dirname + '/../what_you_hear/when_nothing_to_scratch.aiff')
             }
         },
         Enter: () => {

@@ -33,7 +33,7 @@ describe('handling keystroke', () => {
       expect(handle_user_input).toBeCalledWith('I am')
       say.mockClear()
       handle_keystroke('Backspace')
-      expect(say).toBeCalledWith('Nothing to scratch.')
+      expect(player.play).toBeCalled()
   })
   it('handles blur', () => {
       handle_keystroke('Escape')

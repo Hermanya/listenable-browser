@@ -114,6 +114,7 @@ window.onload = function() {
                 } else {
                     say(`${chat.name} says: ${message}`)
                 }
+                active_chat = chat
                 mark_as_read(chat)
             }
         })

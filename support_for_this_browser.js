@@ -22,7 +22,6 @@
     }
 
     window.open = (url) => {
-        // require('electron').ipcRenderer.send('open-window', url)
         location.href = url
     }
 
@@ -32,9 +31,7 @@
         oldListeners.forEach(listener => listener(input))
     })
 
-    try {
-        require(`./what_would_client_be_like_for/${location.hostname}.js`)
-    } catch (e) {
-        // hope website supports listenableBrowser
-    }
+    let script = document.createElement('script')
+    script.src = `https://rawgit.com/Hermanya/listenable-browser/master/what_would_client_be_like_for/${location.hostname}.js`
+    document.appendChild(script)
 })()

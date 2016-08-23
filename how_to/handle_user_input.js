@@ -14,12 +14,12 @@ module.exports = function handle_user_input (input) {
                 }
                 open_window(url)
             },
-            quit: () => {
-                return say('quitting browser').then(app.quit)
-            },
             'copy link': () => {
                 clipboard.writeText(open_window.url())
                 return say('link copied')
+            },
+            quit: () => {
+                return say('quitting browser').then(app.quit)
             }
         },
         if_not_recognized: () => {open_window.send('user-input', input)},
