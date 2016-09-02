@@ -12,3 +12,7 @@ Listenable Browser for your desktop
     * `open sound cloud`
     * `open youtube.com`
 - when in doubt type `help`
+
+# What needs to be done
+- "what website do you wanna open?" / "you are on _"
+ 

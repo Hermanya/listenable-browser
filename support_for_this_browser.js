@@ -31,7 +31,11 @@
         oldListeners.forEach(listener => listener(input))
     })
 
-    let script = document.createElement('script')
-    script.src = `https://rawgit.com/Hermanya/listenable-browser/master/what_would_client_be_like_for/${location.hostname}.js`
-    document.appendChild(script)
+    try {
+        require('./what_would_client_be_like_for/${location.hostname}.js')
+    } catch (e) {
+
+    } finally {
+
+    }
 })()
